@@ -11,6 +11,10 @@ namespace MoneyTree.Models.MoneyTree_Models
 
         public string Name { get; set; }
 
+        public DateTimeOffset Date { get; set; }
+
+        public DateTimeOffset? Updated { get; set; }
+
         public decimal Amount { get; set; }
 
         public bool Reconciled { get; set; }

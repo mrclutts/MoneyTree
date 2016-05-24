@@ -16,7 +16,7 @@ namespace MoneyTree.Models
         public string LastName { get; set; }
         public string DisplayName { get; set; }
         public string Avatar { get; set; }
-        public int ?HouseholdId { get; set; }
+        public int? HouseholdId { get; set; }
         public virtual Household Household { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
@@ -24,6 +24,7 @@ namespace MoneyTree.Models
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             // Add custom user claims here
+            userIdentity.AddClaim(new Claim("HouseholdId", HouseholdId.ToString()));
             return userIdentity;
         }
     }
@@ -40,8 +41,6 @@ namespace MoneyTree.Models
             return new ApplicationDbContext();
         }
 
-       
-
         public DbSet<Household> Households { get; set; }
         public DbSet<Budget> Budgets { get; set; }
         public DbSet<Account> Accounts { get; set; }
@@ -51,18 +50,27 @@ namespace MoneyTree.Models
         public DbSet<AccountHistory> AccountHistories { get; set; }
         public DbSet<BudgetType> BudgetTypes { get; set; }
         public DbSet<BudgetItem> BudgetItems { get; set; }
+        public DbSet<Invitation> Invitations { get; set; }
+        public DbSet<AvatarCount> AvatarCount { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             // Configure HouseholdId as PK for Budget
-            modelBuilder.Entity<Budget>()
-                .HasKey(e => e.HouseholdId);
+            //modelBuilder.Entity<Budget>()
+            //    .HasKey(e => e.HouseholdId);
+
+            //// Configure HouseholdId as PK for Budget
+            //modelBuilder.Entity<Household>()
+            //    .HasKey(e => e.BudgetId);
 
             // Configure HouseholdId as FK for Budget
-            modelBuilder.Entity<Budget>()
-                        .HasRequired(s => s.Household)
-                        .WithRequiredPrincipal(ad => ad.Budget);
+            modelBuilder.Entity<Household>()
+                        .HasOptional(s => s.Budget)
+                        .WithRequired(ad => ad.Household);
+          
+
+            
 
         }
     }

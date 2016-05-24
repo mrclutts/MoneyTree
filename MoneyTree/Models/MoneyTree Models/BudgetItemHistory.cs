@@ -15,7 +15,7 @@ namespace MoneyTree.Models.MoneyTree_Models
 
         public DateTimeOffset Created { get; set; }
 
-        public decimal ?OldLimit { get; set; }
+        public decimal? OldLimit { get; set; }
 
         public decimal NewLimit { get; set; }
 

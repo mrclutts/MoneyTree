@@ -1,0 +1,12 @@
+﻿
+body{
+    margin:0!important;
+}
+.first {
+  background-color: #0E9FB4;
+    height:800px;
+}
+.second{
+    background-color: #0FB493;
+    height: 200px;
+}

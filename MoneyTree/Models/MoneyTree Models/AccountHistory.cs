@@ -13,7 +13,7 @@ namespace MoneyTree.Models.MoneyTree_Models
 
         public virtual Account Account { get; set; }
 
-        public decimal ?OldBalance { get; set; }
+        public decimal? OldBalance { get; set; }
 
         public decimal NewBalance { get; set; }
 

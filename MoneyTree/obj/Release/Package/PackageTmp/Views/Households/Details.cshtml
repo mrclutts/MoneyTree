@@ -1,0 +1,70 @@
+﻿@model MoneyTree.Models.MoneyTree_Models.Household
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Household</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Budget.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Budget.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedBy.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedBy.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Created)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Created)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Updated)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BudgetId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BudgetId)
+        </dd>
+
+    </dl>
+</div>
+
+
+<p>
+    @Html.ActionLink("Invite","Invite","Households")
+
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

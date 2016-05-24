@@ -22,7 +22,9 @@ namespace MoneyTree.Models.MoneyTree_Models
 
         public DateTimeOffset Created { get; set; }
 
-        public DateTimeOffset Updated { get; set; }
+        public DateTimeOffset? Updated { get; set; }
+
+        public int Balance { get; set; }
 
         public int HouseholdId { get; set; }
 

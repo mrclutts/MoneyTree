@@ -7,14 +7,21 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using MoneyTree.Models;
+using System.IO;
+using MoneyTree.Helpers;
+using System.Drawing;
+using MoneyTree.Controllers;
+using System.Drawing.Imaging;
 
 namespace MoneyTree.Controllers
 {
+    [RequireHttps]
     [Authorize]
     public class ManageController : Controller
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        ApplicationDbContext db = new ApplicationDbContext();
 
         public ManageController()
         {
@@ -50,6 +57,109 @@ namespace MoneyTree.Controllers
             }
         }
 
+        //Get: /Manage/ChangeName
+        public ActionResult ChangeName()
+        {
+           
+            ViewBag.DisplayName = db.Users.Find(User.Identity.GetUserId()).DisplayName;
+            
+            return View();
+        }
+       
+
+
+        //Post: /Manage/ChangeName
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeName(ChangeNameViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = User.Identity.GetUserId();
+                var user = db.Users.Find(userId);
+                if (model.DisplayName != null)
+                {
+                    user.DisplayName = model.DisplayName;
+                }
+                if (model.FirstName != null)
+                {
+                    user.FirstName = model.FirstName;
+                }
+                if (model.LastName != null)
+                {
+                    user.LastName = model.LastName;
+                }
+                db.SaveChanges();
+                return RedirectToAction("Dashboard", "Households");
+            }
+            return View(model);
+
+        }
+        //Get: /Manage/ChangeAvatar
+        public ActionResult ChangeAvatar()
+        {
+
+            ViewBag.Avatar = db.Users.Find(User.Identity.GetUserId()).Avatar;
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeAvatar(ChangeAvatarViewModel model, string[] image)
+        {
+            if (ModelState.IsValid)
+            {
+                var Count = db.AvatarCount.First();
+                var fileCount = ++(Count.Count);
+                db.SaveChanges();
+                var fileName = "Avatar" + fileCount;
+                
+                int iFrom = image[0].IndexOf("/") + "/".Length;
+                int iTo = image[0].LastIndexOf(";");
+                string result = image[0].Substring(iFrom, iTo - iFrom);
+                
+
+
+                var myImage = LoadImage(image[0], result);
+
+                //if (ImageUploadValidator.IsWebFriendlyImage(myImage))
+                //{
+                var imageName = fileName + "." + result;
+                myImage.Save(Path.Combine(Server.MapPath("/img/avatars/" + imageName)),ImageFormat.Jpeg);
+                model.Avatar = "/img/avatars/" + imageName;
+                //}
+                var userId = User.Identity.GetUserId();
+                var user = db.Users.Find(userId);
+                user.Avatar = model.Avatar;
+                db.SaveChanges();
+                return RedirectToAction("Dashboard", "Households");
+            }
+            return View(model);
+
+        }
+       
+        public Image LoadImage(string myImage, string ext)
+        {
+            //data:image/gif;base64,
+            var source = myImage.Substring(myImage.IndexOf(",", +1));
+            if (ext == "jpeg")
+            {
+                source = source.Substring(5);
+                
+            }
+            else {
+                
+                source = source.Substring(1);
+                
+            }
+            byte[] bytes = Convert.FromBase64String(source);
+            Image image;
+            using (MemoryStream ms = new MemoryStream(bytes))
+            {
+                image = Image.FromStream(ms);
+            }
+
+            return image;
+        }
         //
         // GET: /Manage/Index
         public async Task<ActionResult> Index(ManageMessageId? message)
@@ -236,7 +346,7 @@ namespace MoneyTree.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
-                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+                return RedirectToAction("Dashboard", "Households",new { Message = ManageMessageId.ChangePasswordSuccess });
             }
             AddErrors(result);
             return View(model);

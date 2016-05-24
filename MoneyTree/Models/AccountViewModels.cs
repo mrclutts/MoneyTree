@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using MoneyTree.Models.MoneyTree_Models;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace MoneyTree.Models
@@ -8,6 +9,20 @@ namespace MoneyTree.Models
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
+
+        [Required]
+        [Display(Name ="Display Name")]
+        public string DisplayName { get; set; }
+
+        [Required]
+        [Display(Name ="First Name")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name ="Last Name")]
+        public string LastName { get; set; }
+
+        public string Avatar { get; set; }
     }
 
     public class ExternalLoginListViewModel
@@ -79,6 +94,22 @@ namespace MoneyTree.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        [Display(Name = "Display Name")]
+        public string DisplayName { get; set; }
+
+        [Required]
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+
+        [Display(Name = "Avatar")]
+        public string Avatar { get; set; }
+
     }
 
     public class ResetPasswordViewModel

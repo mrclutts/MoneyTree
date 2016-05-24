@@ -1,0 +1,263 @@
+﻿@model MoneyTree.Models.MoneyTree_Models.Household
+
+@{
+    ViewBag.Title = "Dashboard";
+}
+<div class="row dash-row">
+    <div class="col-sm-12">
+        <div id="dash-well" class="well">
+            <ul class="user-info pull-right pull-none-xsm">
+
+                <!-- Profile Info -->
+                <li class="profile-info dropdown">
+                    <!-- add class "pull-right" if you want to place this from right -->
+
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <img src="@Html.Raw(Html.Action("GetUserAvatar", "Account"))" alt="" class="img-circle" width="54" />
+                        @Html.Raw(Html.Action("GetCurrentDisplayName", "Account"))
+                    </a>
+
+                    <ul class="dropdown-menu">
+
+                        <!-- Reverse Caret -->
+                        <li class="caret"></li>
+
+                        <!-- Profile sub-links -->
+                        <li>
+                            <a href="@Url.Action("ChangeName", "Manage")">
+                                <i class="entypo-user"></i>
+                                Change Name
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="@Url.Action("ChangePassword", "Manage")">
+                                <i class="entypo-lock"></i>
+                                Change Password
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("ChangeAvatar", "Manage")">
+                                <i class="entypo-picture"></i>
+                                Change Avatar
+                            </a>
+                        </li>
+                        <li>
+                            @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { @class = "form-margin" }))
+                            {
+                                @Html.AntiForgeryToken()
+                            <a href="javascript:document.getElementById('logoutForm').submit()">
+                                <i class="entypo-logout"></i> Log off                             
+                            </a>
+                            }
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <h1><strong>@Model.Name</strong></h1>
+            <h3>@DateTimeOffset.Now.LocalDateTime</h3>
+            <div class="clearfix"></div>
+
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Budget.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Budget.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedBy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Created)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Created)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Updated)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BudgetId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BudgetId)
+        </dd>
+
+    </dl>
+
+    <div class="col-sm-6">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title">Members of @Model.Name</div>
+
+                <div class="panel-options">
+                    <a href="#sample-modal" data-toggle="modal" data-target="#sample-modal-dialog-1" class="bg"><i class="entypo-cog"></i></a>
+                    <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
+                    <a href="#" data-rel="reload"><i class="entypo-arrows-ccw"></i></a>
+                    <a href="#" data-rel="close"><i class="entypo-cancel"></i></a>
+                </div>
+            </div>
+            <table class="table table-bordered table-responsive">
+                <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Account Balance</th>
+                        @*<th>Activity</th>*@
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @if (Model.Users != null)
+                    {
+                        foreach (var user in Model.Users)
+                        {
+                            <tr>
+                                <td>@user.FirstName</td>
+                                <td>@user.LastName</td>
+                                <td>$15000.00</td>
+                                @*<td class="text-center"><span class="pie">4,3,5</span></td>*@
+                            </tr>
+                        }
+                    }
+
+
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div class="col-sm-6">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title">Accounts for @Model.Name</div>
+                
+                <div class="panel-options">
+                    
+                    <a href="#sample-modal" data-toggle="modal" data-target="#sample-modal-dialog-1" class="bg"><i class="entypo-cog"></i></a>
+                    <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
+                    <a href="#" data-rel="reload"><i class="entypo-arrows-ccw"></i></a>
+                    <a href="#" data-rel="close"><i class="entypo-cancel"></i></a>
+                </div>
+            </div>
+            <table class="table table-bordered table-responsive">
+                <thead>
+                    <tr>
+                        <th>Account Name</th>
+                        <th>Balance</th>
+                        <th>Updated</th>
+                        <th>Actions</th>
+                        @*<th>Activity</th>*@
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @if (Model.Accounts != null)
+                    {
+                        foreach (var account in Model.Accounts)
+                        {
+                            <tr>
+                                <td>@account.Name</td>
+                                <td>@account.Balance</td>
+                                @if (account.Updated.HasValue)
+                                {
+                                <td>@account.Updated.Value.LocalDateTime</td>
+                                }
+                                else {
+                                    <td>@account.Created.LocalDateTime</td>
+                                }
+                                <td>
+                                    <a href="@Url.Action("Edit", "Households", new { id = account.Id })"><i class="fa fa-edit"></i></a>
+                                    <a href="@Url.Action("Delete","Households", new { id = account.Id })"><i class="fa fa-trash"></i></a>
+
+                                </td>
+                                @*<td class="text-center"><span class="pie">4,3,5</span></td>*@
+                            </tr>
+                        }
+                    }
+
+
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+
+
+
+    @Html.ActionLink("Invite to Household", "Invite", "Households") |
+    <a href="#" data-toggle="modal" data-target="#myModal">Leave Household</a>
+    | <a href="@Url.Action("Create","Accounts")"><i class="fa fa-plus" title="Add Account"></i></a>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Are you sure you wish to leave the house?</h4>
+                </div>
+                <div class="modal-body">
+                    @using (Html.BeginForm("Leave", "Households", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="householdId" value="@Model.Id" />
+                        if (Model.Users.Count() == 1)
+                        {
+
+                            <button type="submit" class="btn btn-red popover-secondary" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="You are the last member of your household.  If you leave, your household will be deleted and you will no longer be able to access your house." data-original-title="Are you sure?">Leave</button>
+                        }
+                        else
+                        {
+                            
+                            <button type="submit" class="btn btn-red popover-secondary" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="If you leave the household, you will no longer have access to any of the data or information associated with the household." data-original-title="Are you sure?">Leave</button>
+
+                        }
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>   
+

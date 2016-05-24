@@ -58,6 +58,34 @@ namespace MoneyTree.Models
         public string ConfirmPassword { get; set; }
     }
 
+    public class EditProfile
+    {
+        
+        [Display(Name = "Display Name")]
+        public string DisplayName { get; set; }
+
+        [Display(Name = "Avatar")]
+        public string Avatar { get; set; }
+
+        public string Id { get; set; }
+    }
+
+    public class ChangeNameViewModel
+    {
+        [Display(Name = "Display Name")]
+        public string DisplayName { get; set; }
+
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+    }
+
+    public class ChangeAvatarViewModel
+    {
+        public string Avatar { get; set; }
+    }
     public class AddPhoneNumberViewModel
     {
         [Required]
