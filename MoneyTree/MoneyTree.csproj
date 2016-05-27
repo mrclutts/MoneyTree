@@ -2508,6 +2508,8 @@
     <Content Include="Views\BudgetItems\Details.cshtml" />
     <Content Include="Views\BudgetItems\Edit.cshtml" />
     <Content Include="Views\BudgetItems\Index.cshtml" />
+    <Content Include="Views\BudgetTypes\CreateAllType.cshtml" />
+    <Content Include="Views\Accounts\Reconcile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

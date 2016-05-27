@@ -9,9 +9,12 @@ using System.Web.Mvc;
 using MoneyTree.Models;
 using MoneyTree.Models.MoneyTree_Models;
 using Microsoft.AspNet.Identity;
+using MoneyTree.Helpers;
 
 namespace MoneyTree.Controllers
 {
+    [RequireHttps]
+    [AuthorizeHouseholdRequired]
     public class TransactionsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -72,7 +75,10 @@ namespace MoneyTree.Controllers
                 {
                     account.Balance = account.Balance - transaction.Amount;
                 }
-                
+                if(account.Reconciled == true)
+                {
+                    account.Reconciled = false;
+                }
                 db.Transactions.Add(transaction);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -98,7 +104,7 @@ namespace MoneyTree.Controllers
                 return HttpNotFound();
             }
             int houseId = int.Parse(User.Identity.GetHouseholdId());
-            ViewBag.BudgetTypeId = new SelectList(db.BudgetTypes.Where(h=>h.HouseholdId==houseId).OrderBy(n=>n.Name), "Id", "Name", transaction.BudgetTypeId);
+            ViewBag.BudgetTypeId = new SelectList(db.BudgetTypes.Where(h=>h.HouseholdId==houseId || h.HouseholdId == null).OrderBy(n=>n.Name), "Id", "Name", transaction.BudgetTypeId);
             ViewBag.TransactionTypeId = new SelectList(db.TransactionTypes, "Id", "Name", transaction.TransactionTypeId);
             ViewBag.AccountId = new SelectList(db.Accounts.Where(a => a.HouseholdId == houseId), "Id", "Name", transaction.AccountId);
             ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", transaction.UserId);
@@ -124,6 +130,7 @@ namespace MoneyTree.Controllers
                 var account = db.Accounts.Find(transaction.AccountId);
                 if (oldTrans.Amount != transaction.Amount || oldTrans.TransactionTypeId != transaction.TransactionTypeId || oldTrans.AccountId != transaction.AccountId)
                 {
+                    account.Reconciled = false;
                     if (transType.Name == "Income")
                     {
                         if(oldTrans.AccountId != transaction.AccountId)
@@ -143,6 +150,7 @@ namespace MoneyTree.Controllers
                 }
                 if (transaction.Void == true)
                 {
+                    account.Reconciled = false;
                     account.Balance = account.Balance + transaction.Amount;
                 }
                 db.Entry(transaction).State = EntityState.Modified;

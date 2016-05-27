@@ -11,7 +11,7 @@ namespace MoneyTree.Models.MoneyTree_Models
 
         public string Name { get; set; }
 
-        public int HouseholdId { get; set; }
+        public int? HouseholdId { get; set; }
 
         public virtual Household Household { get; set; }
     }

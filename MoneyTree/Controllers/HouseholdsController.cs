@@ -58,9 +58,9 @@ namespace MoneyTree.Controllers
         //Get Households/TransactionsChart
         public ActionResult AccountChart()
         {
-            var houseId = db.Households.Find(int.Parse(User.Identity.GetHouseholdId()));
-            var data = (from acct in houseId.Accounts
-                        let sum = (from trans in acct.Transactions
+            var house = db.Households.Find(int.Parse(User.Identity.GetHouseholdId()));
+            var data = (from acct in house.Accounts
+                        let sum = (from trans in acct.Transactions.Where(x => x.Reconciled == false)
                                    select trans.Amount).DefaultIfEmpty().Sum()
                         select new
                         {
@@ -69,7 +69,21 @@ namespace MoneyTree.Controllers
                         }).ToArray();
             return Content(JsonConvert.SerializeObject(data), "application/json");
         }
-       
+
+        //Get Households/BudgetChart
+        public ActionResult BudgetChart()
+        {
+            var house = db.Households.Find(int.Parse(User.Identity.GetHouseholdId()));
+            var data = (from budget in house.BudgetTypes
+                        let sum = (from bud in house.BudgetItems
+                                   select bud.BudgetedAmount).DefaultIfEmpty().Sum()
+                        select new
+                        {
+                            label = budget.Name,
+                            value = sum
+                        }).ToArray();
+            return Content(JsonConvert.SerializeObject(data), "application/json");
+        }
         // GET: Households/Create
         public ActionResult Create()
         {
@@ -103,9 +117,17 @@ namespace MoneyTree.Controllers
                 household.CreatedBy = user.FirstName + " " + user.LastName;
                 
                 
-                db.Households.Add(household);
-                user.HouseholdId = household.Id;
+                db.Households.Add(household);               
                 db.SaveChanges();
+                user.HouseholdId = household.Id;
+                var BudgetTypes = db.BudgetTypes.Where(b => b.HouseholdId == null).ToList();
+                foreach (var bud in BudgetTypes)
+                {
+                    bud.HouseholdId = household.Id;
+                }
+                db.BudgetTypes.AddRange(BudgetTypes);
+                db.SaveChanges();
+
                 await ControllerContext.HttpContext.RefreshAuthentication(user);
                 return RedirectToAction("Dashboard", "Households");
             }

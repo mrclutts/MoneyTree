@@ -8,9 +8,12 @@ using System.Web;
 using System.Web.Mvc;
 using MoneyTree.Models;
 using MoneyTree.Models.MoneyTree_Models;
+using MoneyTree.Helpers;
 
 namespace MoneyTree.Controllers
 {
+    [RequireHttps]
+    [AuthorizeHouseholdRequired]
     public class BudgetTypesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -19,7 +22,7 @@ namespace MoneyTree.Controllers
         public ActionResult Index()
         {
             int houseId = int.Parse(User.Identity.GetHouseholdId());
-            var budgetTypes = db.BudgetTypes.Where(h=>h.HouseholdId == houseId);
+            var budgetTypes = db.BudgetTypes.Where(h => h.HouseholdId == houseId || h.HouseholdId == null);
             return View(budgetTypes.ToList());
         }
 
@@ -44,6 +47,30 @@ namespace MoneyTree.Controllers
             ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name");
             return View();
         }
+
+        // GET: BudgetTypes/Create
+        public ActionResult CreateAllType()
+        {
+            ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name");
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateAllType([Bind(Include = "Id,Name")] BudgetType budgetType)
+        {
+            if (ModelState.IsValid)
+            {
+                
+                db.BudgetTypes.Add(budgetType);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", budgetType.HouseholdId);
+            return View(budgetType);
+        }
+
 
         // POST: BudgetTypes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 

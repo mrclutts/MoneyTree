@@ -17,21 +17,16 @@
         <th>
             @Html.DisplayNameFor(model => model.Name)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Created)
+       <th>
+           @Html.DisplayNameFor(model => model.Reconciled)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Updated)
+            Statement Balance
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Balance)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Reconciled)
-        </th>       
-        <th>
-            Action
-        </th>
+        <th></th>
     </tr>
 
 @foreach (var item in Model) {
@@ -42,23 +37,24 @@
         <td>
             @Html.DisplayFor(modelItem => item.Name)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Created)
+        <td> 
+            @Html.DisplayFor(modelItem=>item.Reconciled)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Updated)
+        <td>@using (Html.BeginForm("Reconcile", "Accounts", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="accountId" value="@item.Id" />
+            <input type="number" name="userBalance" placeholder="Enter Statement Balance"/><input type="submit" value="Reconcile" />
+        }
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Balance)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Reconciled)
-        </td>
-        
-        <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
             @Html.ActionLink("Details", "Details", new { id=item.Id }) |
             @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+
         </td>
     </tr>
 }
