@@ -10,11 +10,9 @@ namespace MoneyTree.Models.MoneyTree_Models
         public Account()
         {
             this.Transactions = new HashSet<Transaction>();
-            this.AccountHistories = new HashSet<AccountHistory>();
+            
         }
         public virtual ICollection<Transaction> Transactions { get; set; }
-
-        public virtual ICollection<AccountHistory> AccountHistories { get; set; }
 
         public int Id { get; set; }
 
@@ -24,7 +22,9 @@ namespace MoneyTree.Models.MoneyTree_Models
 
         public DateTimeOffset? Updated { get; set; }
 
-        public int Balance { get; set; }
+        public decimal Balance { get; set; }
+
+        public bool Reconciled { get; set; }
 
         public int HouseholdId { get; set; }
 

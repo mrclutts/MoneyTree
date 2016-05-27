@@ -1,0 +1,98 @@
+﻿@model MoneyTree.Models.MoneyTree_Models.Transaction
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Transaction</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.BudgetType.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BudgetType.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TransactionType.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TransactionType.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Updated)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Amount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Amount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Reconciled)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Reconciled)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Void)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Void)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AccountId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AccountId)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

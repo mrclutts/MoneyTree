@@ -19,16 +19,24 @@ namespace MoneyTree.Models.MoneyTree_Models
 
         public bool Reconciled { get; set; }
 
-        public int BudgetTypeId { get; set; }
+        public bool Void { get; set; }
+
+        public int? BudgetTypeId { get; set; }
 
         public virtual BudgetType BudgetType { get; set; }
 
         public string UserId { get; set; }
 
+        public virtual ApplicationUser User { get; set; }
+
+        public int AccountId { get; set; }
+
+        public virtual Account Account { get; set; }
+
         public int TransactionTypeId { get; set; }
 
         public virtual TransactionType TransactionType { get; set; }
 
-        public virtual ApplicationUser User { get; set; }
+        
     }
 }

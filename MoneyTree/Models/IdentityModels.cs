@@ -42,36 +42,14 @@ namespace MoneyTree.Models
         }
 
         public DbSet<Household> Households { get; set; }
-        public DbSet<Budget> Budgets { get; set; }
+        public DbSet<BudgetItem> BudgetItems { get; set; }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<TransactionType> TransactionTypes { get; set; }
         public DbSet<BudgetItemHistory> BudgetItemHistories { get; set; }
-        public DbSet<AccountHistory> AccountHistories { get; set; }
         public DbSet<BudgetType> BudgetTypes { get; set; }
-        public DbSet<BudgetItem> BudgetItems { get; set; }
         public DbSet<Invitation> Invitations { get; set; }
         public DbSet<AvatarCount> AvatarCount { get; set; }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-            // Configure HouseholdId as PK for Budget
-            //modelBuilder.Entity<Budget>()
-            //    .HasKey(e => e.HouseholdId);
-
-            //// Configure HouseholdId as PK for Budget
-            //modelBuilder.Entity<Household>()
-            //    .HasKey(e => e.BudgetId);
-
-            // Configure HouseholdId as FK for Budget
-            modelBuilder.Entity<Household>()
-                        .HasOptional(s => s.Budget)
-                        .WithRequired(ad => ad.Household);
-          
-
-            
-
-        }
-    }
+      }
 }

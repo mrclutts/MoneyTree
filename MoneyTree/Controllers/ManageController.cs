@@ -116,8 +116,8 @@ namespace MoneyTree.Controllers
                 int iFrom = image[0].IndexOf("/") + "/".Length;
                 int iTo = image[0].LastIndexOf(";");
                 string result = image[0].Substring(iFrom, iTo - iFrom);
-                
 
+                
 
                 var myImage = LoadImage(image[0], result);
 

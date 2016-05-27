@@ -12,6 +12,8 @@ using Microsoft.AspNet.Identity;
 using MoneyTree.Helpers;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using System.Web.Helpers;
+using Newtonsoft.Json;
 
 namespace MoneyTree.Controllers
 {
@@ -23,7 +25,7 @@ namespace MoneyTree.Controllers
         // GET: Households
         public ActionResult Index()
         {
-            var households = db.Households.Include(h => h.Budget).Include(h => h.CreatedBy);
+            var households = db.Households.Include(h => h.BudgetItems).Include(h => h.CreatedBy);
             return View(households.ToList());
         }
 
@@ -53,8 +55,21 @@ namespace MoneyTree.Controllers
 
             return View(house);
         }
-
-
+        //Get Households/TransactionsChart
+        public ActionResult AccountChart()
+        {
+            var houseId = db.Households.Find(int.Parse(User.Identity.GetHouseholdId()));
+            var data = (from acct in houseId.Accounts
+                        let sum = (from trans in acct.Transactions
+                                   select trans.Amount).DefaultIfEmpty().Sum()
+                        select new
+                        {
+                            label = acct.Name,
+                            value = sum
+                        }).ToArray();
+            return Content(JsonConvert.SerializeObject(data), "application/json");
+        }
+       
         // GET: Households/Create
         public ActionResult Create()
         {
@@ -214,7 +229,7 @@ namespace MoneyTree.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.Id = new SelectList(db.Budgets, "HouseholdId", "Name", household.Id);
+            ViewBag.Id = new SelectList(db.BudgetItems, "HouseholdId", "Name", household.Id);
             ViewBag.CreatedById = new SelectList(db.Users, "Id", "FirstName", household.CreatedBy);
             return View(household);
         }
@@ -224,7 +239,7 @@ namespace MoneyTree.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Created,Updated,CreatedById,BudgetId")] Household household)
+        public ActionResult Edit([Bind(Include = "Id,Name")] Household household)
         {
             if (ModelState.IsValid)
             {
@@ -232,7 +247,7 @@ namespace MoneyTree.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Id = new SelectList(db.Budgets, "HouseholdId", "Name", household.Id);
+            ViewBag.Id = new SelectList(db.BudgetItems, "HouseholdId", "Name", household.Id);
             ViewBag.CreatedById = new SelectList(db.Users, "Id", "FirstName", household.CreatedBy);
             return View(household);
         }
