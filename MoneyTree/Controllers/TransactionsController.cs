@@ -120,6 +120,7 @@ namespace MoneyTree.Controllers
         {
             if (ModelState.IsValid)
             {
+                var hi = "";
                 var oldTrans = db.Transactions.AsNoTracking().FirstOrDefault(t => t.Id == transaction.Id);
                 var oldTransAccount = oldTrans.AccountId;
                 var oldAccountId = db.Accounts.AsNoTracking().FirstOrDefault(a => a.Id == oldTrans.AccountId).Id;
