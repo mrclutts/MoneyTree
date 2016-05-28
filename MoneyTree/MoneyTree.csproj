@@ -2435,7 +2435,7 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Private.config" />
+    <Content Include="SendGrid.config" />
     <Content Include="Views\Households\Create.cshtml" />
     <Content Include="Views\Households\Delete.cshtml" />
     <Content Include="Views\Households\Details.cshtml" />
