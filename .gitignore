@@ -45,6 +45,12 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
-
 Private.config
 packages
+
+
+
+MoneyTree/Private.config
+*.config
+
+MoneyTree/Private.config
